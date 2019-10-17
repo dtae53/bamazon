@@ -39,59 +39,37 @@ function purchasePrompt(){
 		name: "ID",
 		type: "input",
 		message:"Please enter Item ID you like to purchase.",
-		//filter:Number
+		filter:Number
 	},
 	{
 		name:"Quantity",
 		type:"input",
-		message:"How many items do you wish to purchase?", 
-		//filter:Number
-	}
+		message:"How many items do you wish to purchase?",
+		filter:Number
+	},
 
- ]).then(function(answers){ 
-	 console.log("Not working")
+ ]).then(function(answers){
  	var quantityNeeded = answers.Quantity;
-	var IDrequested = answers.ID;
-	console.log("QUANT" + quantityNeeded);
-	console.log("ID" + IDrequested);
-	var newQuery ="SELECT * FROM products";
-	connection.query(newQuery, function(err,res) {
-		if(err) { throw err }
-		console.log(res)
-		connection.end()
-	}); 
-	//purchaseOrder(IDrequested, quantityNeeded);
+ 	var IDrequested = answers.ID;
+ 	purchaseOrder(IDrequested, quantityNeeded);
  });
-}; 
+};
 
+//Code gets hungup here for some reason? 
 function purchaseOrder(ID, amtNeeded){
-	console.log(typeof ID, ID);
-	console.log("hey") 
-	console.log(typeof amtNeeded, amtNeeded)
-	var newQuery ="SELECT * FROM products";
-	connection.query(newQuery, function(err,res) {
-		if(err) { throw err }
-		console.log(res)
-		connection.end()
-	});
-	/*connection.query("SELECT * FROM products WHERE item_id = " + ID, function(err,res){
-		if(err){
-			connection.end()
-			console.log(err)};
-		console.log("beep")
+	connection.query('Select * FROM products WHERE item_id = ' + ID, function(err,res){
+		if(err){console.log(err)};
 		if(amtNeeded <= res[0].stock_quantity){
 			var totalCost = res[0].price * amtNeeded;
 			console.log("Good news your order is in stock!");
-			console.log("Your total cost for " + amtNeeded + " " + res[0].product_name + " is " + totalCost + " Thank you!");
+			console.log("Your total cost for " + amtNeeded + " " +res[0].product_name + " is " + totalCost + " Thank you!");
 
-			connection.query("UPDATE products SET stock_quantity = stock_quantity - " + amtNeeded + " WHERE item_id = " + ID);
+			connection.query("UPDATE products SET stock_quantity = stock_quantity - " + amtNeeded + "WHERE item_id = " + ID);
 		} else{
 			console.log("Insufficient quantity, sorry we do not have enough " + res[0].product_name + "to complete your order.");
 		};
-		//displayProducts();
-	});*/
-//	connection.end()
+		displayProducts();
+	});
 };
 
 displayProducts(); 
-
